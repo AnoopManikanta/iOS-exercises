@@ -1,0 +1,13 @@
+//
+// Copyright © 2022 Surya Software Systems Pvt. Ltd.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+
+
+#include "Pods/Target Support Files/Pods-AnoopExercises/Pods-AnoopExercises.dev-debug.xcconfig"
+#include "AnoopExercises/Configs/Dev/Dev.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV DEBUG

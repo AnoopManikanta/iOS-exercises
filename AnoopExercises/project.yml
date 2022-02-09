@@ -1,0 +1,106 @@
+name: AnoopExercises
+fileGroups: [
+  AnoopExercises,
+  AnoopExercisesTests,
+  AnoopExercisesUITests
+]
+
+configs:
+  Prod-Debug: debug
+  Prod-Release: release 
+  Dev-Debug: debug
+  Dev-Release: release
+
+schemes:
+  AnoopExercises:
+    build:
+      targets:
+        AnoopExercises: all
+        AnoopExercisesTests: [analyze, test, profile]
+        AnoopExercisesUITests: [analyze, test, profile]
+    run:
+      config: Prod-Debug
+    archive:
+      config: Prod-Release
+    test:
+      config: Prod-Debug
+      targets: [AnoopExercisesTests, AnoopExercisesUITests]
+
+  AnoopExercises-Dev:
+    build:
+      targets:
+        AnoopExercises: all
+        AnoopExercisesTests: [analyze, test, profile]
+        AnoopExercisesUITests: [analyze, test, profile]
+    run:
+      config: Dev-Debug
+    archive:
+      config: Dev-Release
+    test:
+      config: Dev-Debug
+      targets: [AnoopExercisesTests, AnoopExercisesUITests]
+
+targets:
+  AnoopExercises:
+    configFiles:
+      Dev-Debug: AnoopExercises/Configs/Dev/Dev-Debug.xcconfig
+      Dev-Release: AnoopExercises/Configs/Dev/Dev-Release.xcconfig
+      Prod-Debug: AnoopExercises/Configs/Prod/Prod-Debug.xcconfig
+      Prod-Release: AnoopExercises/Configs/Prod/Prod-Release.xcconfig
+    type: application
+    platform: iOS
+    deploymentTarget: 11.0
+    sources:
+      - path: AnoopExercises/Strings
+        buildPhase: resources
+      - path: AnoopExercises/Sources
+        buildPhase: sources
+      - path: AnoopExercises/Resources
+        buildPhase: resources
+      - path: AnoopExercises/Theme
+        buildPhase: sources
+        
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.surya"
+        DEVELOPMENT_TEAM: "21NJKRFJ1N"
+        INFOPLIST_FILE: AnoopExercises/Plist/Info.plist
+        TARGETED_DEVICE_FAMILY: 1
+        
+    preBuildScripts:
+      - script: "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/AnoopExercises/Theme/R/R.generated.swift\""
+        name: "R.swift"
+        inputFiles:
+          - $TEMP_DIR/rswift-lastrun
+        outputFiles:
+          - $SRCROOT/AnoopExercises/Theme/R/R.generated.swift
+
+  AnoopExercisesTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: 11.0
+    sources:
+      - path: AnoopExercisesTests/Sources
+        buildPhase: sources
+    dependencies:
+      - target: AnoopExercises
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.surya.tests"
+        INFOPLIST_FILE: AnoopExercisesTests/Plist/Info.plist
+
+  AnoopExercisesUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: 11.0
+    sources:
+      - path: AnoopExercisesUITests/Sources
+        buildPhase: sources
+    dependencies:
+      - target: AnoopExercises
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: "com.surya.ui-tests"
+        DEVELOPMENT_TEAM: "21NJKRFJ1N"
+        INFOPLIST_FILE: AnoopExercisesUITests/Plist/Info.plist
+        TARGETED_DEVICE_FAMILY: 1
