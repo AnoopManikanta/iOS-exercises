@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             window = UIWindow(frame: UIScreen.main.bounds)
             // Create a new instance of LeoUIComponentsViewController
             let viewController = ViewController()
-            window?.setupRootViewController(with: viewController)
+            window?.setupRootViewController()
         }
         return true
     }
