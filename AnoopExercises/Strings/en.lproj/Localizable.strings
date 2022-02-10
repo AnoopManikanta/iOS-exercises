@@ -1,0 +1,16 @@
+//
+// Copyright © 2022 Surya Software Systems Pvt. Ltd.
+//
+
+home = "Value Value Value";
+conversionDescription1 = "degrees Fahrenhiet degrees Fahrenhiet";
+conversionDescription2 = "is really";
+coversionCelsiusLabelText = "100";
+conversionTextFieldPlaceholder = "Value Value Value";
+conversionDescription3 = "degrees Celius";
+mapViewTypeStandard = "Standard";
+mapViewTypeHybrid = "Hybrid";
+mapViewTypeSatellite = "Satellite";
+questionLabel = "???";
+conversionLabel = "Conversion";
+mapLabel = "Map";

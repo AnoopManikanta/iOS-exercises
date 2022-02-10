@@ -5,8 +5,6 @@
 import UIKit
 
 class ViewController: UIViewController, UITextFieldDelegate {
-    //TODO: implement R strings, Reduce code wherever possible
-    
     @IBOutlet var fahrenhietLabel: UITextField?
     @IBOutlet var celsiusLabel: UILabel?
     
@@ -27,7 +25,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if let celsiusValue = celsiusValue {
             celsiusLabel?.text = numberFormatter.string(from: NSNumber(value: celsiusValue.value))
         } else {
-            celsiusLabel?.text = "???"
+            celsiusLabel?.text = R.string.localizable.questionLabel()
         }
     }
     
@@ -40,8 +38,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     } ()
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let existingTextHasDecimalSeperator = textField.text?.range(of: ".")
-        let replacementTextHasDecimalSeperator = string.range(of: ".")
+        let currentLocale = Locale.current
+        let decimalSeperator = currentLocale.decimalSeparator ?? "."
+        
+        let existingTextHasDecimalSeperator = textField.text?.range(of: decimalSeperator)
+        let replacementTextHasDecimalSeperator = string.range(of:decimalSeperator)
         if existingTextHasDecimalSeperator != nil, replacementTextHasDecimalSeperator != nil {
             return false
         } else {
@@ -50,8 +51,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func fahrenhietFieldEditingChanged(_ textField: UITextField){
-        if let text = textField.text, let value = Double(text) {
-            fahrenhietValue = Measurement(value: value, unit: .fahrenheit)
+        if let text = textField.text, let number = numberFormatter.number(from: text) {
+            fahrenhietValue = Measurement(value: number.doubleValue, unit: .fahrenheit)
         } else {
             fahrenhietValue = nil
         }
@@ -86,7 +87,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         fahrenhietLabel.delegate = self
         
         // anchors for 1st description
-        let description1 = Label(text: "degrees Fahrenhiet", fontSize: 36, fontColor: UIColor.orange)
+        let description1Text = R.string.localizable.conversionDescription1(preferredLanguages: ["\(Locale.current)"])
+        let description1 = Label(text: description1Text, fontSize: 36, fontColor: UIColor.orange)
         view.addSubview(description1)
         NSLayoutConstraint.activate([
             description1.topAnchor.constraint(equalTo: fahrenhietLabel.bottomAnchor, constant: 8),
@@ -96,7 +98,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // anchors for 2nd description
-        let description2 = Label(text: "is really", fontSize: 36)
+        let description2Text = R.string.localizable.conversionDescription2(preferredLanguages: ["\(Locale.current)"])
+        let description2 = Label(text: description2Text, fontSize: 36)
         view.addSubview(description2)
         NSLayoutConstraint.activate([
             description2.topAnchor.constraint(equalTo: description1.bottomAnchor, constant: 8),
@@ -106,7 +109,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // anchors for description celsius label
-        celsiusLabel = Label(text: "100", fontSize: 70, fontColor: UIColor.orange)
+        let celsiusLabelText = R.string.localizable.coversionCelsiusLabelText(preferredLanguages: ["\(Locale.current)"])
+        celsiusLabel = Label(text: celsiusLabelText, fontSize: 70, fontColor: UIColor.orange)
         guard let celsiusLabel = celsiusLabel else {
             return
         }
@@ -120,7 +124,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         ])
         
         // anchors for 3rd description
-        let description3 = Label(text: "degrees Celsius", fontSize: 36, fontColor: UIColor.orange)
+        let description3Text = R.string.localizable.conversionDescription3(preferredLanguages: ["\(Locale.current)"])
+        let description3 = Label(text: description3Text, fontSize: 36, fontColor: UIColor.orange)
         view.addSubview(description3)
         NSLayoutConstraint.activate([
             description3.topAnchor.constraint(equalTo: celsiusLabel.bottomAnchor, constant: 8),
@@ -139,13 +144,16 @@ func Label(text: String, fontSize: CGFloat, fontColor: UIColor = UIColor.black) 
     label.textAlignment = .center
     label.font = UIFont.systemFont(ofSize: fontSize)
     label.textColor = fontColor
+    label.lineBreakMode = .byWordWrapping
+    label.numberOfLines = 0
     label.translatesAutoresizingMaskIntoConstraints = false
     return label
 }
 
 func fahrenhietTextField() -> UITextField {
     let textField = UITextField()
-    textField.placeholder = "Value"
+    let placeholder = R.string.localizable.conversionTextFieldPlaceholder(preferredLanguages: ["\(Locale.current)"])
+    textField.placeholder = placeholder
     textField.textColor = UIColor.orange
     textField.font = UIFont.systemFont(ofSize: 70)
     textField.translatesAutoresizingMaskIntoConstraints = false

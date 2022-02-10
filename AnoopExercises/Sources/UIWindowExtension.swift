@@ -12,8 +12,8 @@ extension UIWindow {
         let tabBarController = UITabBarController()
         // Add view controllers to TabBarController
         tabBarController.viewControllers = [
-            embedInNavController(ViewController(), title: "Conversion"),
-            embedInNavController(MapViewController(), title: "Map")
+            embedInNavController(ViewController(), title: R.string.localizable.conversionLabel(preferredLanguages: ["\(Locale.current)"])),
+            embedInNavController(MapViewController(), title: R.string.localizable.mapLabel(preferredLanguages: ["\(Locale.current)"]))
         ]
         rootViewController = tabBarController
 

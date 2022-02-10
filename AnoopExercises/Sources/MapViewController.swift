@@ -17,8 +17,10 @@ class MapViewController: UIViewController {
         
         // setting mapView as the view of this controller
         view = mapView
-        
-        let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
+        let standard = R.string.localizable.mapViewTypeStandard(preferredLanguages: ["\(Locale.current)"])
+        let hybrid = R.string.localizable.mapViewTypeHybrid(preferredLanguages: ["\(Locale.current)"])
+        let satellite = R.string.localizable.mapViewTypeSatellite(preferredLanguages: ["\(Locale.current)"])
+        let segmentedControl = UISegmentedControl(items: [standard, hybrid, satellite])
         
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.addTarget(self, action: #selector(mapTypeChanged(_:)), for: .valueChanged)

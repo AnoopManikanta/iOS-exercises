@@ -1,0 +1,16 @@
+//
+// Copyright © 2022 Surya Software Systems Pvt. Ltd.
+//
+
+home = "Home";
+conversionDescription1 = "grados Fahrenhiet";
+conversionDescription2 = "realmente es";
+coversionCelsiusLabelText = "100";
+conversionTextFieldPlaceholder = "Valor";
+conversionDescription3 = "grados Celsius";
+mapViewTypeStandard = "Estándar";
+mapViewTypeHybrid = "Híbrida";
+mapViewTypeSatellite = "Satélite";
+questionLabel = "???";
+conversionLabel = "Conversión";
+mapLabel = "Mapa";
