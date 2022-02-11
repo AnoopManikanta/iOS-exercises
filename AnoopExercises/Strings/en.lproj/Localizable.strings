@@ -5,8 +5,8 @@
 home = "Value Value Value";
 conversionDescription1 = "degrees Fahrenhiet degrees Fahrenhiet";
 conversionDescription2 = "is really";
-coversionCelsiusLabelText = "100";
-conversionTextFieldPlaceholder = "Value Value Value";
+celsiusLabelText = "100";
+textFieldPlaceholder = "Value";
 conversionDescription3 = "degrees Celius";
 mapViewTypeStandard = "Standard";
 mapViewTypeHybrid = "Hybrid";
