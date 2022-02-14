@@ -1,0 +1,24 @@
+PODS:
+  - libPhoneNumber-iOS (0.9.15)
+  - R.swift (5.4.0):
+    - R.swift.Library (~> 5.3.0)
+  - R.swift.Library (5.3.0)
+
+DEPENDENCIES:
+  - libPhoneNumber-iOS (~> 0.8)
+  - R.swift
+
+SPEC REPOS:
+  trunk:
+    - libPhoneNumber-iOS
+    - R.swift
+    - R.swift.Library
+
+SPEC CHECKSUMS:
+  libPhoneNumber-iOS: 0a32a9525cf8744fe02c5206eb30d571e38f7d75
+  R.swift: c533450b0f7dc494e0993f5f1a1db925d84c3006
+  R.swift.Library: 0fc583cb55a99e28901299cc451614cad1161962
+
+PODFILE CHECKSUM: 8d80340fdd9aa3dd2d8dacf0c7e76d20383a623c
+
+COCOAPODS: 1.11.2

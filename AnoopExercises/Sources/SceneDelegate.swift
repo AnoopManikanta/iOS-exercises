@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         // Create a new instance of LeoUIComponentsViewController
         let viewController = ViewController()
-        window?.setupRootViewController(with: viewController)
+        window?.setupRootViewController()
     }
 
     func sceneDidDisconnect(_: UIScene) {
