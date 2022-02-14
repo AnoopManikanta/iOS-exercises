@@ -7,12 +7,16 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var nameField: UITextField!
     @IBOutlet var valueField: UITextField!
     @IBOutlet var serialField: UITextField!
     @IBOutlet var date: UILabel!
-    var item: Item!
+    var item: Item! {
+        didSet{
+            navigationItem.title = item.name
+        }
+    }
     // Format Item Value
     let numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -30,12 +34,35 @@ class DetailViewController: UIViewController {
         return formatter
     } ()
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    @objc func backgroundTapped(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         nameField.text = item.name
         serialField.text = item.serialNumber
         valueField.text = numberFormatter.string(from: NSNumber(value: item.valueInDollars))
         date.text = dateFormatter.string(from: item.dateCreated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        view.endEditing(true)
+        item.name = nameField.text ?? ""
+        item.serialNumber = serialField.text
+        
+        if let valueText = valueField.text, let value = numberFormatter.number(from: valueText){
+            item.valueInDollars = value.intValue
+        } else {
+            item.valueInDollars = 0
+        }
     }
     
     override func viewDidLoad() {
@@ -47,6 +74,7 @@ class DetailViewController: UIViewController {
         let nameHorizontalStack = horizontalDetailsStack()
         let valueHorizontalStack = horizontalDetailsStack()
         let serialHorizontalStack = horizontalDetailsStack()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped(_:)))
         
         nameField = TextField()
         valueField = TextField()
@@ -65,6 +93,7 @@ class DetailViewController: UIViewController {
         verticalStack.addArrangedSubview(date)
         
         view.addSubview(verticalStack)
+        view.addGestureRecognizer(tapGesture)
         
         NSLayoutConstraint.activate([
             verticalStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -76,6 +105,10 @@ class DetailViewController: UIViewController {
         ])
         name.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         nameField.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
+        
+        nameField.delegate = self
+        valueField.delegate = self
+        serialField.delegate = self
     }
 }
 

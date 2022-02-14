@@ -8,31 +8,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var itemStore: ItemStore!
     var tableView: UITableView!
     
-    // Table view header
-    func headerView() -> UIView {
-        let header = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-        let editBtn = editButton()
-        let addBtn = addButton()
-        
-        editBtn.addTarget(self, action: #selector(toggleEditingMode(_:)), for: .touchUpInside)
-        addBtn.addTarget(self, action: #selector(addNewItem(_:)), for: .touchUpInside)
-
-        header.addSubview(editBtn)
-        header.addSubview(addBtn)
-        NSLayoutConstraint.activate([
-            editBtn.bottomAnchor.constraint(equalTo: header.layoutMarginsGuide.bottomAnchor),
-            editBtn.leadingAnchor.constraint(equalTo: header.layoutMarginsGuide.leadingAnchor),
-            editBtn.widthAnchor.constraint(equalTo: header.layoutMarginsGuide.widthAnchor, multiplier: 0.4, constant: 20),
-            addBtn.bottomAnchor.constraint(equalTo: header.layoutMarginsGuide.bottomAnchor),
-            addBtn.trailingAnchor.constraint(equalTo: header.layoutMarginsGuide.trailingAnchor),
-            addBtn.widthAnchor.constraint(equalTo: header.layoutMarginsGuide.widthAnchor, multiplier: 0.4, constant: 20)
-        ])
-        
-        return header
-    }
-    
     // add new item to the table
-    @objc func addNewItem(_ sender: UIButton) {
+    @objc func addNewItem() {
         let newItem = itemStore.createItem()
         
         if let index = itemStore.allItems.firstIndex(of: newItem) {
@@ -42,12 +19,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     // toggle table's editing mode
-    @objc func toggleEditingMode(_ sender: UIButton) {
+    @objc func toggleEditingMode() {
         if tableView.isEditing {
-            sender.setTitle(R.string.localizable.tableEdit(), for: .normal)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableEdit(), style: .plain, target: self, action: #selector(toggleEditingMode))
             tableView.setEditing(false, animated: true)
         } else {
-            sender.setTitle(R.string.localizable.tableDone(), for: .normal)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableDone(), style: .done, target: self, action: #selector(toggleEditingMode))
             tableView.setEditing(true, animated: true)
         }
     }
@@ -92,22 +69,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let item = itemStore.allItems[row]
             let detailViewController = DetailViewController()
             detailViewController.item = item
-            present(detailViewController, animated: true, completion: nil)
+            navigationController?.pushViewController(detailViewController, animated: true)
         } else {
             preconditionFailure(R.string.localizable.viewError())
         }
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        itemStore = ItemStore()
-        
+        navigationItem.title = R.string.localizable.title()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableEdit(), style: .plain, target: self, action: #selector(toggleEditingMode))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableAdd(), style: .plain, target: self, action: #selector(addNewItem))
         tableView = createTableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.tableHeaderView = headerView()
         
         view.addSubview(tableView)
 

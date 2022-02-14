@@ -12,3 +12,4 @@ serialLabel = "Serial";
 valueLabel = "Value";
 cellID = "MyCell";
 fatalError = "not implemented";
+title= "LootLogger";
