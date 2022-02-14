@@ -4,9 +4,12 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+var itemDataSource: ItemStore!
+
+class ViewController: UIViewController {
     var itemStore: ItemStore!
     var tableView: UITableView!
+    // TODO: access modifiers for UI functions
     
     // add new item to the table
     @objc func addNewItem() {
@@ -29,52 +32,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    // Move table's cells from position to the other
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        itemStore.moveItem(from: sourceIndexPath.row, to: destinationIndexPath.row)
-    }
-    
-    // Setting number of rows in the table
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemStore.allItems.count
-    }
-    
-    // Setting data that each cell of the table should hold
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: R.string.localizable.cellID(), for: indexPath) as! ItemCell
-        
-        // set the text on the cell with the description of the item that is the nth index of items
-        // where n = row this cell will appear on the table view
-        let item = itemStore.allItems[indexPath.row]
-        print("ss")
-        cell.nameLabel.text = item.name
-        cell.serialNumberLabel.text = item.serialNumber
-        cell.valueLabel.text = "$\(item.valueInDollars)"
-        
-        return cell
-    }
-    
-    // Delete a cell from the row
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let item = itemStore.allItems[indexPath.row]
-            itemStore.removeItem(item)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        }
-    }
-    
-    // Display new View controller with details of the tapped cell
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let row = tableView.indexPathForSelectedRow?.row {
-            let item = itemStore.allItems[row]
-            let detailViewController = DetailViewController()
-            detailViewController.item = item
-            navigationController?.pushViewController(detailViewController, animated: true)
-        } else {
-            preconditionFailure(R.string.localizable.viewError())
-        }
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
@@ -82,6 +39,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        itemDataSource = itemStore
         view.backgroundColor = .white
         navigationItem.title = R.string.localizable.title()
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableEdit(), style: .plain, target: self, action: #selector(toggleEditingMode))
@@ -99,28 +57,75 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor)
         ])
     }
+    
+    private func editButton() -> UIButton {
+        let editButton = UIButton()
+        editButton.setTitle(R.string.localizable.tableEdit(), for: .normal)
+        editButton.setTitleColor(.blue, for: .normal)
+        editButton.translatesAutoresizingMaskIntoConstraints = false
+        return editButton
+    }
+
+    private func addButton() -> UIButton {
+        let addButton = UIButton()
+        addButton.setTitle(R.string.localizable.tableAdd(), for: .normal)
+        addButton.setTitleColor(.blue, for: .normal)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        return addButton
+    }
+
+    private func createTableView() -> UITableView {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(ItemCell.self, forCellReuseIdentifier: R.string.localizable.cellID())
+        tableView.rowHeight = 65
+        return tableView
+    }
 }
 
-func editButton() -> UIButton {
-    let editButton = UIButton()
-    editButton.setTitle(R.string.localizable.tableEdit(), for: .normal)
-    editButton.setTitleColor(.blue, for: .normal)
-    editButton.translatesAutoresizingMaskIntoConstraints = false
-    return editButton
-}
-
-func addButton() -> UIButton {
-    let addButton = UIButton()
-    addButton.setTitle(R.string.localizable.tableAdd(), for: .normal)
-    addButton.setTitleColor(.blue, for: .normal)
-    addButton.translatesAutoresizingMaskIntoConstraints = false
-    return addButton
-}
-
-func createTableView() -> UITableView {
-    let tableView = UITableView()
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    tableView.register(ItemCell.self, forCellReuseIdentifier: R.string.localizable.cellID())
-    tableView.rowHeight = 65
-    return tableView
+extension UIViewController:  UITableViewDelegate, UITableViewDataSource {
+    // Move table's cells from position to the other
+    public func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        itemDataSource.moveItem(from: sourceIndexPath.row, to: destinationIndexPath.row)
+    }
+    
+    // Setting number of rows in the table
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return itemDataSource.allItems.count
+    }
+    
+    // Setting data that each cell of the table should hold
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as! ItemCell
+        
+        // set the text on the cell with the description of the item that is the nth index of items
+        // where n = row this cell will appear on the table view
+        let item = itemDataSource.allItems[indexPath.row]
+        cell.nameLabel.text = item.name
+        cell.serialNumberLabel.text = item.serialNumber
+        cell.valueLabel.text = "$\(item.valueInDollars)"
+        
+        return cell
+    }
+    
+    // Delete a cell from the row
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let item = itemDataSource.allItems[indexPath.row]
+            itemDataSource.removeItem(item)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    // Display new View controller with details of the tapped cell
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let row = tableView.indexPathForSelectedRow?.row {
+            let item = itemDataSource.allItems[row]
+            let detailViewController = DetailViewController()
+            detailViewController.item = item
+            navigationController?.pushViewController(detailViewController, animated: true)
+        } else {
+            preconditionFailure(R.string.localizable.viewError())
+        }
+    }
 }

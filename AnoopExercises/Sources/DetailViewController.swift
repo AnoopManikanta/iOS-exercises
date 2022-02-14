@@ -34,15 +34,18 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         return formatter
     } ()
     
+    // dismiss keyboard on return
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
+    // dismiss keyboard on view tap
     @objc func backgroundTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
+    // load data before appearing on the screen
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         nameField.text = item.name
@@ -110,64 +113,64 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         valueField.delegate = self
         serialField.delegate = self
     }
-}
+    
+    private func verticalDetailsStack() -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.distribution = .fill
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }
 
-func verticalDetailsStack() -> UIStackView {
-    let stack = UIStackView()
-    stack.axis = .vertical
-    stack.distribution = .fill
-    stack.spacing = 8
-    stack.translatesAutoresizingMaskIntoConstraints = false
-    return stack
-}
+    private func horizontalDetailsStack() -> UIStackView {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.distribution = .fill
+        stack.alignment = .fill
+        stack.spacing = 8
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }
 
-func horizontalDetailsStack() -> UIStackView {
-    let stack = UIStackView()
-    stack.axis = .horizontal
-    stack.distribution = .fill
-    stack.alignment = .fill
-    stack.spacing = 8
-    stack.translatesAutoresizingMaskIntoConstraints = false
-    return stack
-}
+    private func detailednameLabel() -> UILabel {
+        let name = UILabel()
+        name.text = R.string.localizable.nameLabel()
+        name.translatesAutoresizingMaskIntoConstraints = false
+        name.textColor = .black
+        return name
+    }
 
-func detailednameLabel() -> UILabel {
-    let name = UILabel()
-    name.text = "Name"
-    name.translatesAutoresizingMaskIntoConstraints = false
-    name.textColor = .black
-    return name
-}
+    private func detailiedSerialLabel() -> UILabel {
+        let serial = UILabel()
+        serial.text = R.string.localizable.serialLabel()
+        serial.translatesAutoresizingMaskIntoConstraints = false
+        serial.textColor = .black
+        return serial
+    }
 
-func detailiedSerialLabel() -> UILabel {
-    let serial = UILabel()
-    serial.text = "Serial"
-    serial.translatesAutoresizingMaskIntoConstraints = false
-    serial.textColor = .black
-    return serial
-}
+    private func detailedValuelabel() -> UILabel {
+        let value = UILabel()
+        value.text = R.string.localizable.valueLabel()
+        value.translatesAutoresizingMaskIntoConstraints = false
+        value.textColor = .black
+        return value
+    }
 
-func detailedValuelabel() -> UILabel {
-    let value = UILabel()
-    value.text = "Value"
-    value.translatesAutoresizingMaskIntoConstraints = false
-    value.textColor = .black
-    return value
-}
+    private func detailedDatelabel() -> UILabel {
+        let date = UILabel()
+        date.text = R.string.localizable.dateLabel()
+        date.translatesAutoresizingMaskIntoConstraints = false
+        date.textColor = .black
+        date.textAlignment = .center
+        return date
+    }
 
-func detailedDatelabel() -> UILabel {
-    let date = UILabel()
-    date.text = "Date"
-    date.translatesAutoresizingMaskIntoConstraints = false
-    date.textColor = .black
-    date.textAlignment = .center
-    return date
-}
-
-func TextField() -> UITextField {
-    let textField = UITextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
-    textField.borderStyle = UITextField.BorderStyle.roundedRect
-    textField.layer.borderWidth = 1.0
-    return textField
+    private func TextField() -> UITextField {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        textField.layer.borderWidth = 1.0
+        return textField
+    }
 }

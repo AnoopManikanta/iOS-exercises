@@ -10,6 +10,7 @@ viewError = "Unexpected Error";
 nameLabel = "Name";
 serialLabel = "Serial";
 valueLabel = "Value";
+dateLabel = "Date";
 cellID = "MyCell";
 fatalError = "not implemented";
 title= "LootLogger";
