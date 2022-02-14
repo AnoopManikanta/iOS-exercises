@@ -3,3 +3,12 @@
 //
 
 home = "Home";
+tableEdit = "Edit";
+tableAdd = "Add";
+tableDone = "Done";
+viewError = "Unexpected Error";
+nameLabel = "Name";
+serialLabel = "Serial";
+valueLabel = "Value";
+cellID = "MyCell";
+fatalError = "not implemented";
