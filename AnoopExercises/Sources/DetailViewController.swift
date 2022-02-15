@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DetailViewController: UIViewController, UITextFieldDelegate {
+class DetailViewController: UIViewController {
     @IBOutlet var nameField: UITextField!
     @IBOutlet var valueField: UITextField!
     @IBOutlet var serialField: UITextField!
@@ -34,15 +34,31 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         return formatter
     } ()
     
-    // dismiss keyboard on return
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
-    
     // dismiss keyboard on view tap
     @objc func backgroundTapped(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
+    }
+    
+    @objc func choosePhotoSource(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.modalPresentationStyle = .popover
+        alertController.popoverPresentationController?.barButtonItem = sender
+        
+        let cameraAction = UIAlertAction(title: "Camera", style: .default){ _ in
+            print("Present Camera")
+        }
+        alertController.addAction(cameraAction)
+        
+        let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default){ _ in
+            print("Present Photo Library")
+        }
+        alertController.addAction(photoLibraryAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel){ _ in
+            print("Clicked Cancel")
+        }
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     // load data before appearing on the screen
@@ -78,6 +94,14 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         let valueHorizontalStack = horizontalDetailsStack()
         let serialHorizontalStack = horizontalDetailsStack()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped(_:)))
+        let toolBar = UIToolbar()
+        var toolBarItems = [UIBarButtonItem] ()
+        toolBarItems.append(
+            UIBarButtonItem(barButtonSystemItem: .camera, target: self, action: #selector(choosePhotoSource))
+        )
+        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        toolBar.setItems(toolBarItems, animated: true)
+//        toolBar.tintColor = .blue
         
         nameField = TextField()
         valueField = TextField()
@@ -97,6 +121,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         
         view.addSubview(verticalStack)
         view.addGestureRecognizer(tapGesture)
+        view.addSubview(toolBar)
         
         NSLayoutConstraint.activate([
             verticalStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
@@ -104,7 +129,11 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             verticalStack.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             verticalStack.heightAnchor.constraint(equalTo: view.layoutMarginsGuide.heightAnchor),
             serialField.leadingAnchor.constraint(equalTo: nameField.leadingAnchor),
-            valueField.leadingAnchor.constraint(equalTo: serialField.leadingAnchor)
+            valueField.leadingAnchor.constraint(equalTo: serialField.leadingAnchor),
+            toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toolBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toolBar.heightAnchor.constraint(equalToConstant: 44),
+            toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         name.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         nameField.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
@@ -172,5 +201,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         textField.borderStyle = UITextField.BorderStyle.roundedRect
         textField.layer.borderWidth = 1.0
         return textField
+    }
+}
+
+extension UIViewController: UITextFieldDelegate {
+    // dismiss keyboard on return
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

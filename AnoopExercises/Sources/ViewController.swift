@@ -47,6 +47,7 @@ class ViewController: UIViewController {
         tableView = createTableView()
         tableView.dataSource = self
         tableView.delegate = self
+        print(tableView.backgroundColor!)
         
         view.addSubview(tableView)
 
@@ -77,7 +78,7 @@ class ViewController: UIViewController {
     private func createTableView() -> UITableView {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(ItemCell.self, forCellReuseIdentifier: R.string.localizable.cellID())
+        tableView.register(ItemCell.self, forCellReuseIdentifier: "MyCell")
         tableView.rowHeight = 65
         return tableView
     }
