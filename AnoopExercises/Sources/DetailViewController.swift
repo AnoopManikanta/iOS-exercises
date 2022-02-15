@@ -85,7 +85,7 @@ class DetailViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "Color")
         let name = detailednameLabel()
         let value = detailedValuelabel()
         let serial = detailiedSerialLabel()
@@ -101,6 +101,8 @@ class DetailViewController: UIViewController {
         )
         toolBar.translatesAutoresizingMaskIntoConstraints = false
         toolBar.setItems(toolBarItems, animated: true)
+        toolBar.tintColor = UIColor(named: "AccentColor")
+        toolBar.barTintColor = UIColor(named: "SecondaryColor")
 //        toolBar.tintColor = .blue
         
         nameField = TextField()
@@ -166,7 +168,6 @@ class DetailViewController: UIViewController {
         let name = UILabel()
         name.text = R.string.localizable.nameLabel()
         name.translatesAutoresizingMaskIntoConstraints = false
-        name.textColor = .black
         return name
     }
 
@@ -174,7 +175,6 @@ class DetailViewController: UIViewController {
         let serial = UILabel()
         serial.text = R.string.localizable.serialLabel()
         serial.translatesAutoresizingMaskIntoConstraints = false
-        serial.textColor = .black
         return serial
     }
 
@@ -182,7 +182,6 @@ class DetailViewController: UIViewController {
         let value = UILabel()
         value.text = R.string.localizable.valueLabel()
         value.translatesAutoresizingMaskIntoConstraints = false
-        value.textColor = .black
         return value
     }
 
@@ -190,7 +189,6 @@ class DetailViewController: UIViewController {
         let date = UILabel()
         date.text = R.string.localizable.dateLabel()
         date.translatesAutoresizingMaskIntoConstraints = false
-        date.textColor = .black
         date.textAlignment = .center
         return date
     }

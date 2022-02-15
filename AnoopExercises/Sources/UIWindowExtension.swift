@@ -10,6 +10,8 @@ extension UIWindow {
         // create a new navigation controller
         let itemStore = ItemStore()
         let navigationController = UINavigationController()
+        navigationController.navigationBar.barTintColor = UIColor(named: "SecondaryColor")
+        navigationController.navigationBar.tintColor = UIColor(named: "AccentColor")
         let viewController = ViewController()
         viewController.itemStore = itemStore
         navigationController.viewControllers = [viewController]

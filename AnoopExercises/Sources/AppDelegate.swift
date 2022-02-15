@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // comes standard on the AppDelegate class. The UIWindow
             // is where all view controllers and views appear.
             window = UIWindow(frame: UIScreen.main.bounds)
+            window!.tintColor = UIColor.blue
             // Create a new instance of LeoUIComponentsViewController
             let viewController = ViewController()
             window?.setupRootViewController(with: viewController)

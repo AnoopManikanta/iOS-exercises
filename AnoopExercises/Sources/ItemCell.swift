@@ -18,6 +18,7 @@ class ItemCell: UITableViewCell {
         serialNumberLabel = addSerialNumberLabel()
         valueLabel = addValueLabel()
         
+        contentView.backgroundColor = UIColor(named: "Color")
         contentView.addSubview(nameLabel)
         contentView.addSubview(serialNumberLabel)
         contentView.addSubview(valueLabel)

@@ -40,15 +40,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         itemDataSource = itemStore
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "SecondaryColor")
         navigationItem.title = R.string.localizable.title()
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableEdit(), style: .plain, target: self, action: #selector(toggleEditingMode))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: R.string.localizable.tableAdd(), style: .plain, target: self, action: #selector(addNewItem))
         tableView = createTableView()
         tableView.dataSource = self
         tableView.delegate = self
-        print(tableView.backgroundColor!)
-        
+
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -80,6 +79,7 @@ class ViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(ItemCell.self, forCellReuseIdentifier: "MyCell")
         tableView.rowHeight = 65
+        tableView.backgroundColor = UIColor(named: "Color")
         return tableView
     }
 }
