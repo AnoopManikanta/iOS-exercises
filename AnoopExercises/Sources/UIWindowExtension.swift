@@ -11,7 +11,7 @@ extension UIWindow {
         let navigationController = UINavigationController(rootViewController: viewController)
         //
         // Set the initial View Controller to our instance of ViewController
-        rootViewController = navigationController
+        rootViewController = viewController
         //
         // Present the window
         makeKeyAndVisible()
