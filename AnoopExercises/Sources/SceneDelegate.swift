@@ -15,7 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         // Create a new instance of LeoUIComponentsViewController
-        let viewController = ViewController()
+        let viewController = PhotosViewController()
+        viewController.store = PhotoStore()
         window?.setupRootViewController(with: viewController)
     }
 

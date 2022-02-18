@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // is where all view controllers and views appear.
             window = UIWindow(frame: UIScreen.main.bounds)
             // Create a new instance of LeoUIComponentsViewController
-            let viewController = ViewController()
+            let viewController = PhotosViewController()
             window?.setupRootViewController(with: viewController)
         }
         return true
@@ -40,3 +40,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 }
+
