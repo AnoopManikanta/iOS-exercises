@@ -3,3 +3,5 @@
 //
 
 home = "Home";
+rootViewTitle = "Photorama";
+backButton = "Back";
