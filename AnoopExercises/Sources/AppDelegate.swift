@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // is where all view controllers and views appear.
             window = UIWindow(frame: UIScreen.main.bounds)
             // Create a new instance of LeoUIComponentsViewController
-            let viewController = ViewController()
+            let viewController = MoodSelectionViewController()
             window?.setupRootViewController(with: viewController)
         }
         return true
