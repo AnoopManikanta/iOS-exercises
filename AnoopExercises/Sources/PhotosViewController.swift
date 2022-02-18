@@ -5,32 +5,62 @@
 import UIKit
 
 class PhotosViewController: UIViewController {
-    @IBOutlet var collectionView: UICollectionView! = {
-        // layout to support scrolling in a particular axis with set cell parameters 
+    // MARK: - views
+
+    private weak var collectionView: UICollectionView!
+
+    // MARK: - variables
+
+    var store: PhotoStore!
+    let photoDataSource = PhotoDataSource()
+
+    // MARK: - View Life Cycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        navigationItem.title = R.string.localizable.rootViewTitle()
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: R.string.localizable.backButton(), style: .plain, target: nil, action: nil)
+
+        let constraints = setupCollectionView()
+        NSLayoutConstraint.activate(constraints)
+
+        // add list of photos
+        fetchPhotos()
+    }
+
+    // MARK: - Setup
+
+    private func setupCollectionView() -> [NSLayoutConstraint] {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: 90, height: 90)
         layout.minimumLineSpacing = 2
         layout.minimumInteritemSpacing = 2
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-        
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: "cvCell")
-        return cv
-    } ()
-    
-    var store: PhotoStore!
-    let photoDataSource = PhotoDataSource()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        activateConstraints()
+
+        let collecitonView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collecitonView.configureView { cv in
+            cv.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.cellIdentifier)
+        }
+
+        collectionView = collecitonView
         collectionView.delegate = self
         collectionView.dataSource = photoDataSource
-        
-        // add list of photos
-        self.store.fetchInterestingPhotos{ (photosResult) in
+
+        view.addSubview(collectionView)
+        let safeArea = view.safeAreaLayoutGuide
+
+        return [
+            collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalTo: safeArea.heightAnchor),
+        ]
+    }
+
+    private func fetchPhotos() {
+        store.fetchInterestingPhotos { photosResult in
             switch photosResult {
             case let .success(photos):
                 print("Successfully found \(photos.count) photos")
@@ -44,47 +74,35 @@ class PhotosViewController: UIViewController {
             self.collectionView.reloadSections(IndexSet(integer: 0))
         }
     }
-    
-    private func activateConstraints() {
-        view.backgroundColor = .white
-        navigationItem.title = "Photorama"
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor)
-        ])
-    }
 }
 
-extension PhotosViewController: UICollectionViewDelegate{
-    
+// MARK: - Collection View Delegate
+
+extension PhotosViewController: UICollectionViewDelegate {
     // display images at each cell
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let photo = photoDataSource.photos[indexPath.row]
-        
+
         // Download the image data
-        store.fetchImage(for: photo){ (result) in
+        store.fetchImage(for: photo) { result in
             // fetch latest index for the photo, as it might change in the process
             guard let photoIndex = self.photoDataSource.photos.firstIndex(of: photo),
-                    case let .success(image) = result else {
+                case let .success(image) = result
+            else {
                 return
             }
             let photoIndexPath = IndexPath(item: photoIndex, section: 0)
-            
+
             // when the request finishes, find the current cell for this photo
             if let cell = self.collectionView.cellForItem(at: photoIndexPath) as? PhotoCollectionViewCell {
                 cell.update(displaying: image)
             }
         }
     }
-    
+
     // on selecting an item, push new vc with respective data to the navigation controller
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt _: IndexPath) {
+        if let selectedIndexPath = collectionView.indexPathsForSelectedItems?.first {
             let photo = photoDataSource.photos[selectedIndexPath.row]
             let destinationVC = PhotoInfoViewController()
             destinationVC.photo = photo

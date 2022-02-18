@@ -8,12 +8,11 @@
 import UIKit
 
 class ImageStore {
-    
     let cache = NSCache<NSString, UIImage>()
-    
+
     func setImage(_ image: UIImage, forKey key: String) {
         cache.setObject(image, forKey: key as NSString)
-        
+
         // Create full URL for image
         let url = imageURL(forKey: key)
 
@@ -40,7 +39,7 @@ class ImageStore {
 
     func deleteImage(forKey key: String) {
         cache.removeObject(forKey: key as NSString)
-        
+
         let url = imageURL(forKey: key)
         do {
             try FileManager.default.removeItem(at: url)
@@ -48,13 +47,11 @@ class ImageStore {
             print("Error removing the image from disk: \(error)")
         }
     }
-    
+
     func imageURL(forKey key: String) -> URL {
-        let documentsDirectories =
-            FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentDirectory = documentsDirectories.first!
         print(documentDirectory)
         return documentDirectory.appendingPathComponent(key)
     }
 }
-

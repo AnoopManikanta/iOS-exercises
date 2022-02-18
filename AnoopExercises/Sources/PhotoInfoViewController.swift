@@ -8,45 +8,59 @@
 import UIKit
 
 class PhotoInfoViewController: UIViewController {
-    @IBOutlet var imageView: UIImageView! = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFit
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
-    } ()
-    
+    // MARK: - Views
+
+    private weak var imageView: UIImageView!
+
+    // MARK: - Variables
+
     var photo: Photo! {
-        didSet{
+        didSet {
             navigationItem.title = photo.title
         }
     }
-    
+
     var store: PhotoStore!
-    
+
+    // MARK: - View Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        activateConstraints()
-        
-        store.fetchImage(for: photo) { (result) in
-            switch result{
+        view.backgroundColor = .white
+        let constraints = setupImageView()
+        NSLayoutConstraint.activate(constraints)
+
+        fetchImage()
+    }
+
+    // MARK: - Setup
+
+    private func setupImageView() -> [NSLayoutConstraint] {
+        let imageView = UIImageView()
+        imageView.configureView { iV in
+            iV.contentMode = .scaleAspectFit
+        }
+        self.imageView = imageView
+        self.imageView.accessibilityLabel = photo.title
+        view.addSubview(self.imageView)
+
+        let safeArea = view.safeAreaLayoutGuide
+        return [
+            self.imageView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.imageView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            self.imageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.imageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+        ]
+    }
+
+    private func fetchImage() {
+        store.fetchImage(for: photo) { result in
+            switch result {
             case let .success(image):
                 self.imageView.image = image
             case let .failure(error):
                 print("Error fetching image for photo: \(error)")
             }
         }
-    }
-    
-    private func activateConstraints() {
-        view.addSubview(imageView)
-        view.backgroundColor = .white
-        imageView.accessibilityLabel = photo.title
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
-        ])
     }
 }
