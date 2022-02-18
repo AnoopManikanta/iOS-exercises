@@ -42,20 +42,19 @@ class PhotosViewController: UIViewController {
         let collecitonView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collecitonView.configureView { cv in
             cv.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.cellIdentifier)
+            cv.delegate = self
+            cv.dataSource = photoDataSource
         }
+        self.collectionView = collecitonView
 
-        collectionView = collecitonView
-        collectionView.delegate = self
-        collectionView.dataSource = photoDataSource
-
-        view.addSubview(collectionView)
+        view.addSubview(self.collectionView)
         let safeArea = view.safeAreaLayoutGuide
 
         return [
-            collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalTo: safeArea.heightAnchor),
+            self.collectionView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+            self.collectionView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            self.collectionView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            self.collectionView.heightAnchor.constraint(equalTo: safeArea.heightAnchor),
         ]
     }
 

@@ -39,9 +39,9 @@ class PhotoInfoViewController: UIViewController {
         let imageView = UIImageView()
         imageView.configureView { iV in
             iV.contentMode = .scaleAspectFit
+            iV.accessibilityLabel = photo.title
         }
         self.imageView = imageView
-        self.imageView.accessibilityLabel = photo.title
         view.addSubview(self.imageView)
 
         let safeArea = view.safeAreaLayoutGuide

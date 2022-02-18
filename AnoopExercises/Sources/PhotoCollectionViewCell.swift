@@ -17,31 +17,32 @@ class PhotoCollectionViewCell: UICollectionViewCell {
 
     static let cellIdentifier = "PhotoCell"
     var photoDescription: String?
-    override var accessibilityLabel: String? {
-        get {
-            return photoDescription
-        }
-        set {}
-    }
-
-    override var accessibilityTraits: UIAccessibilityTraits {
-        get {
-            return super.accessibilityTraits.union([.image, .button])
-        }
-        set {}
-    }
-
-    override var isAccessibilityElement: Bool {
-        get {
-            return true
-        }
-        set {}
-    }
 
     // MARK: - Cell Update
 
     // if image is present then display the image, else activate spinner animation
     func update(displaying image: UIImage?) {
+        var accessibilityLabel: String? {
+            get {
+                return photoDescription
+            }
+            set {}
+        }
+        
+        var accessibilityTraits: UIAccessibilityTraits {
+            get {
+                return super.accessibilityTraits.union([.image, .button])
+            }
+            set {}
+        }
+    
+        var isAccessibilityElement: Bool {
+            get {
+                return true
+            }
+            set {}
+        }
+        
         var constraints = setupImageView()
         constraints += setupSpinner()
         NSLayoutConstraint.activate(constraints)
